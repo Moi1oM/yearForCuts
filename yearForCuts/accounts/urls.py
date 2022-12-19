@@ -8,5 +8,5 @@ urlpatterns = [
     re_path(r'^rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
-    path('google/callback/', views.google_callback,name='google_callback'), 
+    path('google/callback/', views.GoogleAccountRegistrationView.google_callback,name='google_callback'), 
 ]

@@ -18,10 +18,10 @@ class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # model = CustomUser
-        fields = ['email', 'nickname']
+        fields = ['email', 'nickname','password']
     def create(self, validated_data):
         # user = CustomUser.objects.create_user(
         user = User.objects.create_user(
-            validated_data["email"], None
+            validated_data["email"], None, None
         )
         return user
