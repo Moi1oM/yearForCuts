@@ -10,6 +10,7 @@ dj-rest-auth = "*"
 django-allauth = "*"
 django-rest-auth = "*"
 django = "*"
+django-dotenv = "*"
 
 [dev-packages]
 
