@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-idl-_sld!vwp+q7so1@p8e-4t%v66ehhx0@bppz*arpdwlu=+3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'corsheaders',
     # my app
     'accounts',
     # django-rest-framework
@@ -63,7 +64,10 @@ INSTALLED_APPS = [
 SITE_ID = 1
 AUTH_USER_MODEL = 'accounts.User' 
 # AUTH_USER_MODEL = 'accounts.CustomUser' 
-
+# CORS 관련 추가
+CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000'
+                         ,'http://localhost:3000']
+CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -118,6 +122,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
