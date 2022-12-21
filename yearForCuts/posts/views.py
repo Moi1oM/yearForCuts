@@ -32,6 +32,14 @@ class PostViewSet(ModelViewSet):
     permission_classes=[permissions.AllowAny, ]
 
 @csrf_exempt
+def checkUserPk(request):
+    temp = json.loads(request.body)
+    email = temp.get('email')
+    user = User.objects.get(email=email)
+    print(user)
+    return JsonResponse({'status':'200', 'userPk':str(user.pk)})
+
+@csrf_exempt
 def checking_google(request):
     BASE_URL = os.environ.get("BASE_URL")
     """

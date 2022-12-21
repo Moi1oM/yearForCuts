@@ -25,6 +25,7 @@ class PostImageSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    
     images = serializers.SerializerMethodField()
 
 	#게시글에 등록된 이미지들 가지고 오기
@@ -37,7 +38,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        print("testing data")
+        print("testing data", validated_data)
         instance = Post.objects.create(**validated_data)
         image_set = self.context['request'].FILES
         for image_data in image_set.getlist('image'):
