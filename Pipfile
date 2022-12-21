@@ -12,6 +12,8 @@ django-rest-auth = "*"
 django = "*"
 django-dotenv = "*"
 django-cors-headers = "*"
+pillow = "*"
+django-filter = "*"
 
 [dev-packages]
 
