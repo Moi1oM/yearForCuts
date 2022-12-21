@@ -35,8 +35,12 @@ class ChangeNicknameView(APIView):
             temp = json.loads(request.body)
             email = temp.get('email')
             new_nickname = temp.get('nickname')
-            update_user_nickname = User.objects.filter(email=email).update(nickname=new_nickname)
-            return JsonResponse({ 'status': '201 Updated'})
+            print(new_nickname)
+            if (new_nickname != None):
+                update_user_nickname = User.objects.filter(email=email).update(nickname=new_nickname)
+                return JsonResponse({ 'status': '201 Updated'})
+            else:
+              return JsonResponse({ 'status': '300 Bad Request'})  
         return JsonResponse({'status': '500 Wrong Method'})
 
 
@@ -58,7 +62,7 @@ class GoogleAccountRegistrationView(APIView):
         email_req_status = email_req.status_code
 
         if email_req_status != 200:
-            return JsonResponse({'err_msg': 'failed to get email'},status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'err_msg': 'failed to get email'}, status=status.HTTP_400_BAD_REQUEST)
         email_req_json = email_req.json()
         email = email_req_json.get('email')
         print("이메일",email_req_status, email)
@@ -70,7 +74,7 @@ class GoogleAccountRegistrationView(APIView):
             user = User.objects.get(email=email)
 
             serializedUser = UserSerializer(user)
-            print('유저', serializedUser)
+            print('유저', user.nickname)
             # # 기존에 가입된 유저의 Provider가 google이 아니면 에러 발생, 맞으면 로그인
             # # 다른 SNS로 가입된 유저
             # social_user = SocialAccount.objects.get(user=user)
@@ -87,7 +91,7 @@ class GoogleAccountRegistrationView(APIView):
             #     return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
             # accept_json = accept.json()
             # accept_json.pop('user', None)
-            return JsonResponse({'user': str(user),'status': '202 UserAlreadyExist' })
+            return JsonResponse({'user': str(user), 'nickname':user.nickname, 'status': '202 UserAlreadyExist' })
         except User.DoesNotExist:
             # 기존에 가입된 유저가 없으면 새로 가입
             # data = {'access_token': accessToken}
