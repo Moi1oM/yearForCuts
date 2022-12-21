@@ -66,9 +66,12 @@ def new_Post(request):
                 # imgs로부터 가져온 이미지 파일 하나를 저장한다.
                 photo.image = img
                 # 데이터베이스에 저장
+                print("here?")
                 photo.save()
-            return JsonResponse({'status':'200 created!'})
+                print("here2?")
+            return JsonResponse({'status':'200 created!','post_pk':post.pk})
         except Exception:
+            print(Exception)
             return JsonResponse({'status':'something wrong.. i`m sorry.'})
 
 @csrf_exempt

@@ -2,6 +2,7 @@
 from django.db import models
 from accounts.models import User
 from datetime import datetime
+from django.utils import timezone
 def nameFile(instance, filename):
     return '/'.join(['images', str(instance.name), filename])
 
