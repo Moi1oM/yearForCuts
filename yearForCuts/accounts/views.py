@@ -18,6 +18,29 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # Create your views here.
 # GOOGLE_CALLBACK_URI = str(os.environ.get("BASR_URL")) + 'accounts/google/callback/'
 
+class ReturnNicknameView(APIView):
+    @csrf_exempt
+    def emailReturn(request):
+        temp = json.loads(request.body)
+        email = temp.get('email')
+        user = User.objects.get(email=email)
+
+        return JsonResponse({'nickname': str(user.nickname)})
+
+
+class ChangeNicknameView(APIView):
+    @csrf_exempt
+    def changeNickname(request):
+        if (request.method == 'POST'):
+            temp = json.loads(request.body)
+            email = temp.get('email')
+            new_nickname = temp.get('nickname')
+            update_user_nickname = User.objects.filter(email=email).update(nickname=new_nickname)
+            return JsonResponse({ 'status': '201 Updated'})
+        return JsonResponse({'status': '500 Wrong Method'})
+
+
+
 
 class GoogleAccountRegistrationView(APIView):
     @csrf_exempt
@@ -64,7 +87,7 @@ class GoogleAccountRegistrationView(APIView):
             #     return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
             # accept_json = accept.json()
             # accept_json.pop('user', None)
-            return JsonResponse({'user': str(user)})
+            return JsonResponse({'user': str(user),'status': '202 UserAlreadyExist' })
         except User.DoesNotExist:
             # 기존에 가입된 유저가 없으면 새로 가입
             # data = {'access_token': accessToken}
