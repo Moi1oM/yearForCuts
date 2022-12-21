@@ -27,13 +27,14 @@ class BaseModel(models.Model):  # 수정시간, 생성시간 모델
 
 class Post(BaseModel):
     id = models.AutoField(primary_key=True)
-    creator = models.ForeignKey(
+    user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="listings")
     title = models.CharField(
         max_length=80, blank=False, null=False)
     letter = models.TextField()
 #    board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    
+
+
     def __int__(self):
         return self.id
 

@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from rest_framework import status
 # Create your views here.
 from .models import Post, PostImage
+from accounts.models import User
 from .serializers import PostSerializer
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -24,12 +25,51 @@ from rest_framework.views import APIView
 from posts import views
 from accounts.models import User
 from django.core import serializers
+import uuid
 
-class PostViewSet(ModelViewSet):
-    queryset = Post.objects.all().order_by('-created_at')
-    serializer_class = PostSerializer
-    filter_backends = [DjangoFilterBackend]
-    permission_classes=[permissions.AllowAny, ]
+# class PostViewSet(ModelViewSet):
+#     queryset = Post.objects.all().order_by('-created_at')
+#     serializer_class = PostSerializer
+#     filter_backends = [DjangoFilterBackend]
+#     permission_classes=[permissions.AllowAny, ]
+def is_valid_uuid(val):
+    try:
+        return uuid.UUID(str(val))
+    except ValueError:
+        return None
+
+@csrf_exempt
+def new_Post(request):
+    if(request.method == 'POST'):
+        try:
+            post = Post()
+            post.title = request.POST['title']
+            post.letter = request.POST['letter']
+            #post.pub_date = timezone.datetime.now()
+            pid=request.POST['public_id']
+            #print("this is pid", pid, type(pid))
+            #uuid_string = uuid.UUID(pid).hex
+            #print (is_valid_uuid(pid))
+            #print(uuid.UUID(pid))
+            #print("this is uuid string",uuid_string, type(uuid_string))
+            user = User.objects.get(public_id=pid)
+            print("this is user",user)
+            post.user = user
+            post.save()
+            # name 속성이 imgs인 input 태그로부터 받은 파일들을 반복문을 통해 하나씩 가져온다 
+            print(request.FILES.getlist('image'))
+            for img in request.FILES.getlist('image'):
+                # Photo 객체를 하나 생성한다.
+                photo = PostImage()
+                # 외래키로 현재 생성한 Post의 기본키를 참조한다.
+                photo.post = post
+                # imgs로부터 가져온 이미지 파일 하나를 저장한다.
+                photo.image = img
+                # 데이터베이스에 저장
+                photo.save()
+            return JsonResponse({'status':'200 created!'})
+        except Exception:
+            return JsonResponse({'status':'something wrong.. i`m sorry.'})
 
 @csrf_exempt
 def checkUserPk(request):

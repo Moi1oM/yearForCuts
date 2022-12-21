@@ -35,7 +35,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ['title','letter','images']
 
     def create(self, validated_data):
         print("testing data", validated_data)
