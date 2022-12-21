@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 # from .managers import CustomUserModelManager
 from .managers import CustomUserManager, UserManager
 from django.utils.translation import gettext_lazy as _
+import uuid
 
 # class CustomUser(AbstractUser):
 #     email = models.EmailField(_('email address'), unique=True)
@@ -25,7 +26,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=150, unique=False, null=True, blank=True)
-    
+    public_id = models.UUIDField(default=uuid.uuid4, unique=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
