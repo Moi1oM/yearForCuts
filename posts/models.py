@@ -37,6 +37,8 @@ class Post(BaseModel):
     title = models.CharField(
         max_length=80, blank=False, null=False)
     letter = models.TextField()
+    color = models.TextField()
+    frame = models.IntegerField()
 #    board = models.ForeignKey(Board, on_delete=models.CASCADE)
 
 

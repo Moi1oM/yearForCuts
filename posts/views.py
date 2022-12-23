@@ -45,6 +45,8 @@ def new_Post(request):
             post = Post()
             post.title = request.POST['title']
             post.letter = request.POST['letter']
+            post.color = request.POST['color']
+            post.frame = int(request.POST['frame'])
             #post.pub_date = timezone.datetime.now()
             pid=request.POST['public_id']
             #print("this is pid", pid, type(pid))
@@ -69,7 +71,7 @@ def new_Post(request):
                 print("here?")
                 photo.save()
                 print("here2?")
-            return JsonResponse({'status':'200 created!','post_pk':post.pk})
+            return JsonResponse({'status':'200 created!','post_pk':post.pk, 'user_email':user.email})
         except Exception:
             print(Exception)
             return JsonResponse({'status':'something wrong.. i`m sorry.'})
@@ -85,33 +87,23 @@ def checkUserPk(request):
 @csrf_exempt
 def checking_google(request):
     BASE_URL = os.environ.get("BASE_URL")
-    """
-    Email Request
-    """
     temp = json.loads(request.body)
-    accessToken = temp.get('accessToken')
-    print(accessToken)
+    publicId = temp.get('pid')
     # refreshToken = request.data["refreshToken"]
     # idToken = request.data["idToken"]
-    email_req = requests.get(
-    f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={accessToken}")
-    email_req_status = email_req.status_code
-
-    if email_req_status != 200:
-        return JsonResponse({'err_msg': 'failed to get email'},status=status.HTTP_400_BAD_REQUEST)
-    email_req_json = email_req.json()
-    email = email_req_json.get('email')
-    print("이메일",email_req_status, email)
-    hi_user = User.objects.get(email=email)
-    userPosts = Post.objects.filter(creator=hi_user.pk)
+    hi_user = User.objects.get(public_id=publicId)
+    userPosts = Post.objects.filter(user=hi_user.pk)
+    #print("userPosts",userPosts)
     postdatas = list(userPosts.values())
-    #print(postdatas)
+    #print("postsdatas",postdatas)
     d=[]
     for i in postdatas:
         #print("start from this",i)
         newdict = {}
         newdict['title']=i['title']
         newdict['letter']=i['letter']
+        newdict['color']=i['color']
+        newdict['frame']=i['frame']
         tmp=PostImage.objects.filter(post=i.get('id'))
         userPostImg = serializers.serialize("json", tmp)
         userPostImg = json.loads(userPostImg)
@@ -125,6 +117,7 @@ def checking_google(request):
         #print("this is plusdict",plusdict)
         newdict['images']=plusdict
         d.append(newdict)
+        #print("newdict",newdict)
     #print("this is d ",d)
     return JsonResponse({'posts': d})
 
