@@ -28,7 +28,7 @@ class BaseModel(models.Model):  # 수정시간, 생성시간 모델
 class Color(models.Model):
     code = models.TextField()
     def __str__(self):
-        self.code
+        return self.code
 
 class Post(BaseModel):
     id = models.AutoField(primary_key=True)

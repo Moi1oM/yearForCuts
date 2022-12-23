@@ -132,7 +132,13 @@ def checking_google(request):
 
 def ReturnColor(request):
     colorlist = Color.objects.all()
-    return JsonResponse({'colorlist': colorlist})
+    temp = []
+    for i in colorlist:
+        temp.append(i.code)
+
+    print(temp)
+    # serializer = PostSerializer(posts, many=True)
+    return JsonResponse({'colorlist': temp})
 
 # class PostCreateView(APIView):
 #     @csrf_exempt
