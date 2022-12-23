@@ -28,7 +28,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*','cloudtype.app']
 
 
 # Application definition
@@ -69,7 +69,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # AUTH_USER_MODEL = 'accounts.CustomUser' 
 # CORS 관련 추가
 CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000'
-                         ,'http://localhost:3000']
+                         ,'http://localhost:3000','.cloudtype.app']
 CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
