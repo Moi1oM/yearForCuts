@@ -25,6 +25,10 @@ class BaseModel(models.Model):  # 수정시간, 생성시간 모델
 #     image_url4 = models.ImageField(upload_to=nameFile, blank=True, null=True)
 #     created_at = models.DateTimeField(auto_now_add=True)
 
+class Color(models.Model):
+    code = models.TextField()
+    def __str__(self):
+        self.code
 
 class Post(BaseModel):
     id = models.AutoField(primary_key=True)

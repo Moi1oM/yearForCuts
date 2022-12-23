@@ -15,6 +15,7 @@ urlpatterns = [
     path('newPost',views.new_Post),
     path('givePosts',views.checking_google),
     path('getUserPk',views.checkUserPk),
+    path('colorlist',views.ReturnColor),
 ]
     # path('post_list/',views.post_list, name='post_list'),
     # path('post_detail/<int:pk>/',views.post_detail, name="post_detail"),

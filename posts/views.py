@@ -5,7 +5,7 @@ import requests
 from django.http import JsonResponse
 from rest_framework import status
 # Create your views here.
-from .models import Post, PostImage
+from .models import Post, PostImage, Color
 from accounts.models import User
 from .serializers import PostSerializer
 from rest_framework import permissions
@@ -129,6 +129,10 @@ def checking_google(request):
     return JsonResponse({'posts': d})
 
 
+
+def ReturnColor(request):
+    colorlist = Color.objects.all()
+    return JsonResponse({'colorlist': colorlist})
 
 # class PostCreateView(APIView):
 #     @csrf_exempt
