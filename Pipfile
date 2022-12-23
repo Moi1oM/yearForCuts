@@ -16,6 +16,7 @@ pillow = "*"
 django-filter = "*"
 boto3 = "*"
 django-storages = "*"
+django-environ = "*"
 
 [dev-packages]
 
