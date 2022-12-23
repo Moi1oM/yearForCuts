@@ -27,6 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=150, unique=False, null=True, blank=True)
     public_id = models.UUIDField(default=uuid.uuid4, unique=True)
+    hidden = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)

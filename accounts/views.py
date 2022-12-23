@@ -18,6 +18,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # Create your views here.
 # GOOGLE_CALLBACK_URI = str(os.environ.get("BASR_URL")) + 'accounts/google/callback/'
 
+
 class ReturnNicknameView(APIView):
     @csrf_exempt
     def emailReturn(request):
@@ -26,6 +27,14 @@ class ReturnNicknameView(APIView):
         user = User.objects.get(email=email)
 
         return JsonResponse({'nickname': str(user.nickname)})
+    @csrf_exempt
+    def pidReturn(request):
+        temp = json.loads(request.body)
+        pid = temp.get('pid')
+        print(pid)
+        user = User.objects.get(public_id = pid)
+        # print(user)
+        return JsonResponse({'email': str(user.email), 'hidden': user.hidden, 'nickname': str(user.nickname)})
 
 
 class ChangeNicknameView(APIView):
