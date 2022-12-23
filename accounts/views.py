@@ -34,11 +34,12 @@ class ChangeNicknameView(APIView):
         if (request.method == 'POST'):
             temp = json.loads(request.body)
             email = temp.get('email')
+            temp_user = User.objects.get(email=email)
             new_nickname = temp.get('nickname')
             print(new_nickname)
             if (new_nickname != None):
                 update_user_nickname = User.objects.filter(email=email).update(nickname=new_nickname)
-                return JsonResponse({ 'status': '201 Updated'})
+                return JsonResponse({'user': str(temp_user), 'pid':temp_user.public_id, 'status': '201 Updated'})
             else:
               return JsonResponse({ 'status': '300 Bad Request'})  
         return JsonResponse({'status': '500 Wrong Method'})
@@ -91,7 +92,8 @@ class GoogleAccountRegistrationView(APIView):
             #     return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
             # accept_json = accept.json()
             # accept_json.pop('user', None)
-            return JsonResponse({'user': str(user), 'nickname':user.nickname, 'status': '202 UserAlreadyExist' })
+            return JsonResponse({'user': str(user), 'pid':user.public_id, 'nickname':user.nickname, 'status': '202 UserAlreadyExist' })
+
         except User.DoesNotExist:
             # 기존에 가입된 유저가 없으면 새로 가입
             # data = {'access_token': accessToken}
