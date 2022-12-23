@@ -28,7 +28,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','.cloudtype.app']
+ALLOWED_HOSTS = ['*','https://port-0-yearforcuts-20z52flbzzr8f5.gksl2.cloudtype.app/']
 
 
 # Application definition
