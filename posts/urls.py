@@ -11,16 +11,17 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    #path('',include(router.urls)),
-    path('newPost',views.new_Post),
-    path('givePosts',views.checking_google),
-    path('getUserPk',views.checkUserPk),
-    path('colorlist',views.ReturnColor),
+    # path('',include(router.urls)),
+    path('newPost', views.new_Post),
+    path('givePosts', views.checking_google),
+    path('getUserPk', views.checkUserPk),
+    path('colorlist', views.ReturnColor),
+    path('deletePost', views.deletePost),
 ]
-    # path('post_list/',views.post_list, name='post_list'),
-    # path('post_detail/<int:pk>/',views.post_detail, name="post_detail"),
+# path('post_list/',views.post_list, name='post_list'),
+# path('post_detail/<int:pk>/',views.post_detail, name="post_detail"),
 
 
-# urlpatterns = [    
+# urlpatterns = [
 #     path('upload/', views.ImageViewSet.as_view(), name='upload'),
 # ]

@@ -26,39 +26,43 @@ from posts import views
 from accounts.models import User
 from django.core import serializers
 import uuid
+import boto3
 
 # class PostViewSet(ModelViewSet):
 #     queryset = Post.objects.all().order_by('-created_at')
 #     serializer_class = PostSerializer
 #     filter_backends = [DjangoFilterBackend]
 #     permission_classes=[permissions.AllowAny, ]
+
+
 def is_valid_uuid(val):
     try:
         return uuid.UUID(str(val))
     except ValueError:
         return None
 
+
 @csrf_exempt
 def new_Post(request):
-    if(request.method == 'POST'):
+    if (request.method == 'POST'):
         try:
             post = Post()
             post.title = request.POST['title']
             post.letter = request.POST['letter']
             post.color = request.POST['color']
             post.frame = int(request.POST['frame'])
-            #post.pub_date = timezone.datetime.now()
-            pid=request.POST['public_id']
-            #print("this is pid", pid, type(pid))
-            #uuid_string = uuid.UUID(pid).hex
-            #print (is_valid_uuid(pid))
-            #print(uuid.UUID(pid))
-            #print("this is uuid string",uuid_string, type(uuid_string))
+            # post.pub_date = timezone.datetime.now()
+            pid = request.POST['public_id']
+            # print("this is pid", pid, type(pid))
+            # uuid_string = uuid.UUID(pid).hex
+            # print (is_valid_uuid(pid))
+            # print(uuid.UUID(pid))
+            # print("this is uuid string",uuid_string, type(uuid_string))
             user = User.objects.get(public_id=pid)
-            print("this is user",user)
+            print("this is user", user)
             post.user = user
             post.save()
-            # name 속성이 imgs인 input 태그로부터 받은 파일들을 반복문을 통해 하나씩 가져온다 
+            # name 속성이 imgs인 input 태그로부터 받은 파일들을 반복문을 통해 하나씩 가져온다
             print(request.FILES.getlist('image'))
             for img in request.FILES.getlist('image'):
                 # Photo 객체를 하나 생성한다.
@@ -71,10 +75,11 @@ def new_Post(request):
                 print("here?")
                 photo.save()
                 print("here2?")
-            return JsonResponse({'status':'200 created!','post_pk':post.pk, 'user_email':user.email})
+            return JsonResponse({'status': '200 created!', 'post_pk': post.pk, 'user_email': user.email})
         except Exception:
             print(Exception)
-            return JsonResponse({'status':'something wrong.. i`m sorry.'})
+            return JsonResponse({'status': 'something wrong.. i`m sorry.'})
+
 
 @csrf_exempt
 def checkUserPk(request):
@@ -82,7 +87,8 @@ def checkUserPk(request):
     email = temp.get('email')
     user = User.objects.get(email=email)
     print(user)
-    return JsonResponse({'status':'200', 'userPk':str(user.pk)})
+    return JsonResponse({'status': '200', 'userPk': str(user.pk)})
+
 
 @csrf_exempt
 def checking_google(request):
@@ -93,34 +99,63 @@ def checking_google(request):
     # idToken = request.data["idToken"]
     hi_user = User.objects.get(public_id=publicId)
     userPosts = Post.objects.filter(user=hi_user.pk)
-    #print("userPosts",userPosts)
+    # print("userPosts",userPosts)
     postdatas = list(userPosts.values())
-    #print("postsdatas",postdatas)
-    d=[]
+    # print("postsdatas",postdatas)
+    d = []
+    print("posts", postdatas)
     for i in postdatas:
-        #print("start from this",i)
+        # print("start from this",i)
         newdict = {}
-        newdict['title']=i['title']
-        newdict['letter']=i['letter']
-        newdict['color']=i['color']
-        newdict['frame']=i['frame']
-        tmp=PostImage.objects.filter(post=i.get('id'))
+        newdict['post_pk'] = i['id']
+        newdict['title'] = i['title']
+        newdict['letter'] = i['letter']
+        newdict['color'] = i['color']
+        newdict['frame'] = i['frame']
+        tmp = PostImage.objects.filter(post=i.get('id'))
         userPostImg = serializers.serialize("json", tmp)
         userPostImg = json.loads(userPostImg)
-        #print("how can i use this",userPostImg, type(userPostImg))
-        idx=1
-        plusdict={}
+        # print("how can i use this",userPostImg, type(userPostImg))
+        idx = 1
+        plusdict = {}
         for j in userPostImg:
-            #print("this is loop",j, type(j))
-            plusdict[f'image{idx}']=j['fields'].get('image')
-            idx+=1
-        #print("this is plusdict",plusdict)
-        newdict['images']=plusdict
+            # print("this is loop",j, type(j))
+            plusdict[f'image{idx}'] = j['fields'].get('image')
+            idx += 1
+        # print("this is plusdict",plusdict)
+        newdict['images'] = plusdict
         d.append(newdict)
-        #print("newdict",newdict)
-    #print("this is d ",d)
+        # print("newdict",newdict)
+    # print("this is d ",d)
     return JsonResponse({'posts': d})
 
+
+def deletePost(request):
+    try:
+        temp = json.loads(request.body)
+        post_pk = temp.get('post_pk')
+        deleting_post = Post.objects.get(id=post_pk)
+        deleting_images = PostImage.objects.filter(post=deleting_post.pk)
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+            aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+        )
+        userPostImg = serializers.serialize("json", deleting_images)
+        userPostImg = json.loads(userPostImg)
+        print("userPostImg", userPostImg)
+        for i in userPostImg:
+            pk = i['pk']
+            key = i['fields'].get('image')
+            print("image-name", key)
+            print("pk", pk)
+            s3_client.delete_object(Bucket=os.environ.get(
+                'AWS_STORAGE_BUCKET_NAME'), Key=key)
+            singleImage = PostImage.objects.get(id=pk)
+            singleImage.delete()
+        return JsonResponse({'status': '200 success!'})
+    except Exception:
+        return JsonResponse({'status': '500'})
 
 
 def ReturnColor(request):
@@ -156,6 +191,7 @@ def ReturnColor(request):
 #         if request.method == 'POST':
 #             new_post = Post.objects.create(email, )
 
+
 @api_view(['GET', 'POST'])
 @csrf_exempt
 def post_list(request):
@@ -172,12 +208,13 @@ def post_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'DELETE'])
 def post_detail(request, pk):
     try:
         post = Post.objects.get(pk=pk)
     except Post.DoesNotExist:
-        return JsonResponse({'status':'status.HTTP_404_NOT_FOUND'})
+        return JsonResponse({'status': 'status.HTTP_404_NOT_FOUND'})
 
     if request.method == 'GET':
         serializer = PostSerializer(post)
