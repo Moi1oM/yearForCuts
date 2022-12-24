@@ -153,6 +153,7 @@ def deletePost(request):
                 'AWS_STORAGE_BUCKET_NAME'), Key=key)
             singleImage = PostImage.objects.get(id=pk)
             singleImage.delete()
+        deleting_post.delete()
         return JsonResponse({'status': '200 success!'})
     except Exception:
         return JsonResponse({'status': '500'})
