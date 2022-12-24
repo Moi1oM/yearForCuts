@@ -69,7 +69,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # AUTH_USER_MODEL = 'accounts.CustomUser' 
 # CORS 관련 추가
 CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000'
-                         ,'http://localhost:3000','ap-northeast-2.compute.amazonaws.com']
+                         ,'http://localhost:3000','http://*.ap-northeast-2.compute.amazonaws.com']
 
 CSRF_TRUSTED_ORIGINS=['http://*.ap-northeast-2.compute.amazonaws.com', 'https://*.ap-northeast-2.compute.amazonaws.com']
 CORS_ALLOW_CREDENTIALS = True
