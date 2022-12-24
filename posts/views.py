@@ -130,6 +130,7 @@ def checking_google(request):
     return JsonResponse({'posts': d})
 
 
+@csrf_exempt
 def deletePost(request):
     try:
         temp = json.loads(request.body)
