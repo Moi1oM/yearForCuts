@@ -23,8 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
-
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -160,12 +159,12 @@ WSGI_APPLICATION = "yearForCuts.wsgi.application"
 
 
 ###########################AWS
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID'] # .csv 파일에 있는 내용을 입력 Access key ID
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY'] # .csv 파일에 있는 내용을 입력 Secret access key
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID') # .csv 파일에 있는 내용을 입력 Access key ID
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY') # .csv 파일에 있는 내용을 입력 Secret access key
 AWS_REGION = 'ap-northeast-2'
 
 ###S3 Storages
-AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME'] # 설정한 버킷 이름
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME') # 설정한 버킷 이름
 #AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
@@ -181,10 +180,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',    
-        'NAME': os.environ['SQL_NAME'],  
-        'USER': os.environ['SQL_USER'],   
-        'PASSWORD': os.environ['SQL_PASSWORD'], 
-        'HOST': os.environ['SQL_HOST'],  
+        'NAME': os.environ.get('SQL_NAME'),  
+        'USER': os.environ.get('SQL_USER'),   
+        'PASSWORD': os.environ.get('SQL_PASSWORD'), 
+        'HOST': os.environ.get'SQL_HOST'),  
         'PORT': '3306',
     }
 }
