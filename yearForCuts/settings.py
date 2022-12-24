@@ -28,7 +28,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','ap-northeast-2.compute.amazonaws.com']
+ALLOWED_HOSTS = ['*','.ap-northeast-2.compute.amazonaws.com']
 
 
 # Application definition
@@ -69,7 +69,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # AUTH_USER_MODEL = 'accounts.CustomUser' 
 # CORS 관련 추가
 CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000'
-                         ,'http://localhost:3000','http://*.ap-northeast-2.compute.amazonaws.com']
+                         ,'http://localhost:3000','http://*.ap-northeast-2.compute.amazonaws.com','https://*.ap-northeast-2.compute.amazonaws.com']
 
 CSRF_TRUSTED_ORIGINS=['http://*.ap-northeast-2.compute.amazonaws.com', 'https://*.ap-northeast-2.compute.amazonaws.com']
 CORS_ALLOW_CREDENTIALS = True
@@ -188,7 +188,12 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
