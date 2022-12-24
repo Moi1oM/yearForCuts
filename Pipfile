@@ -17,6 +17,7 @@ django-filter = "*"
 boto3 = "*"
 django-storages = "*"
 django-environ = "*"
+mysqlclient = "*"
 
 [dev-packages]
 autopep8 = "*"

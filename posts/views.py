@@ -165,8 +165,6 @@ def ReturnColor(request):
     temp = []
     for i in colorlist:
         temp.append(i.code)
-
-    print(temp)
     # serializer = PostSerializer(posts, many=True)
     return JsonResponse({'colorlist': temp})
 
