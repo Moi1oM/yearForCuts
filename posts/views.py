@@ -197,7 +197,7 @@ def ReturnColor(request):
 def post_list(request):
 
     if request.method == 'GET':
-        posts = Post.objects.filter(creator=email)
+        posts = Post.objects.filter(creator=email).order_by("-id")
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
