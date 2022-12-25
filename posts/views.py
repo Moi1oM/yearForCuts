@@ -98,7 +98,7 @@ def checking_google(request):
     # refreshToken = request.data["refreshToken"]
     # idToken = request.data["idToken"]
     hi_user = User.objects.get(public_id=publicId)
-    userPosts = Post.objects.filter(user=hi_user.pk)
+    userPosts = Post.objects.filter(user=hi_user.pk).order_by("-id")
     # print("userPosts",userPosts)
     postdatas = list(userPosts.values())
     # print("postsdatas",postdatas)
@@ -197,7 +197,7 @@ def ReturnColor(request):
 def post_list(request):
 
     if request.method == 'GET':
-        posts = Post.objects.filter(creator=email).order_by("-id")
+        posts = Post.objects.filter(creator=email)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
