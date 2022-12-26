@@ -63,10 +63,10 @@ class ChangeHiddenView(APIView):
             
             if (temp_user.hidden == False):
                 update_user_hidden = User.objects.filter(email=email).update(hidden=True)
-                return JsonResponse({'user': str(temp_user), 'hiddenBefore':temp_user.hidden, 'hiddenAfter':update_user_hidden.hidden, 'status': '201 Updated'})
+                return JsonResponse({'user': str(temp_user), 'hiddenBefore':temp_user.hidden, 'hiddenAfter':True, 'status': '201 Updated'})
             if (temp_user.hidden == True):
                 update_user_hidden = User.objects.filter(email=email).update(hidden=False)
-                return JsonResponse({'user': str(temp_user), 'hiddenBefore':temp_user.hidden, 'hiddenAfter':update_user_hidden.hidden, 'status': '201 Updated'})
+                return JsonResponse({'user': str(temp_user), 'hiddenBefore':temp_user.hidden, 'hiddenAfter':False, 'status': '201 Updated'})
             else:
               return JsonResponse({ 'status': '300 Bad Request'})  
         return JsonResponse({'status': '500 Wrong Method'})
