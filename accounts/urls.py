@@ -12,4 +12,5 @@ urlpatterns = [
     path('nickname/', views.ReturnNicknameView.emailReturn ,name='emailReturn'), 
     path('nickname/pid', views.ReturnNicknameView.pidReturn ,name='pidReturn'), 
     path('nickname/change', views.ChangeNicknameView.changeNickname ,name='changeNickname'), 
+    path('hidden/change', views.ChangeHiddenView.changeHidden ,name='changeHidden'), 
 ]
