@@ -171,17 +171,19 @@ class KakaoAccountRegistrationView(APIView):
         """
         temp = json.loads(request.body)
         accessToken = temp.get('accessToken')
-        print(accessToken)
+        email = temp.get('email')
+        print(email)
         # refreshToken = request.data["refreshToken"]
         # idToken = request.data["idToken"]
-        email_req = requests.get(
-        f"https://kapi.kakao.com/v2/user/me", headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','Authorization': 'Bearer ' + accessToken})
-        email_req_status = email_req.status_code
-        if email_req_status != 200:
-            return JsonResponse({'err_msg': 'failed to get email from kakao', 'status':'400 email failed'}, status=status.HTTP_400_BAD_REQUEST)
-        email_req_json = email_req.json()
-        email = email_req_json.get('email')
-        print("이메일",email_req_status, email)
+        # email_req = requests.get(
+        # f"https://kapi.kakao.com/v2/user/me", headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','Authorization': 'Bearer ' + accessToken})
+        # email_req_status = email_req.status_code
+        # print("여기다", email_req.json())
+        # if email_req_status != 200:
+        #     return JsonResponse({'err_msg': 'failed to get email from kakao', 'status':'400 email failed'}, status=status.HTTP_400_BAD_REQUEST)
+        # email_req_json = email_req.json()
+        # email = email_req_json.get('email')
+        # print("이메일",email_req_status, email)
         """
         Signup or Signin Request
         """
