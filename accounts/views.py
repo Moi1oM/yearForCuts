@@ -90,7 +90,7 @@ class GoogleAccountRegistrationView(APIView):
         f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={accessToken}")
         email_req_status = email_req.status_code
         if email_req_status != 200:
-            return JsonResponse({'err_msg': 'failed to get email', 'status':'400 email failed'}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'err_msg': 'failed to get email from google', 'status':'400 email failed'}, status=status.HTTP_400_BAD_REQUEST)
         email_req_json = email_req.json()
         email = email_req_json.get('email')
         print("이메일",email_req_status, email)
@@ -161,3 +161,39 @@ class GoogleAccountRegistrationView(APIView):
             # accept_json = accept.json()
             # accept_json.pop('user', None)
         ## return JsonResponse("registration")
+
+class KakaoAccountRegistrationView(APIView):
+    @csrf_exempt
+    def kakao_callback(request):
+        BASE_URL = os.environ.get("BASE_URL")
+        """
+        Email Request
+        """
+        temp = json.loads(request.body)
+        accessToken = temp.get('accessToken')
+        print(accessToken)
+        # refreshToken = request.data["refreshToken"]
+        # idToken = request.data["idToken"]
+        email_req = requests.get(
+        f"https://kapi.kakao.com/v2/user/me", headers = {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8','Authorization': 'Bearer ' + accessToken})
+        email_req_status = email_req.status_code
+        if email_req_status != 200:
+            return JsonResponse({'err_msg': 'failed to get email from kakao', 'status':'400 email failed'}, status=status.HTTP_400_BAD_REQUEST)
+        email_req_json = email_req.json()
+        email = email_req_json.get('email')
+        print("이메일",email_req_status, email)
+        """
+        Signup or Signin Request
+        """
+
+        try:
+            user = User.objects.get(email=email)
+
+            serializedUser = UserSerializer(user)
+            print('유저', user.nickname)
+            return JsonResponse({'user': str(user), 'pid':user.public_id, 'nickname':user.nickname, 'status': '202 UserAlreadyExist' })
+
+        except User.DoesNotExist:
+            new_user = User.objects.create_user( email, nickname=None, password=None)
+            # return redirect("/login")
+            return JsonResponse({'user': str(new_user), 'status': '201 Created'})

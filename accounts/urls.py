@@ -9,6 +9,7 @@ urlpatterns = [
     re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
     path('google/callback/', views.GoogleAccountRegistrationView.google_callback,name='google_callback'), 
+    path('kakao/callback/', views.KakaoAccountRegistrationView.kakao_callback,name='kakao_callback'), 
     path('nickname/', views.ReturnNicknameView.emailReturn ,name='emailReturn'), 
     path('nickname/pid', views.ReturnNicknameView.pidReturn ,name='pidReturn'), 
     path('nickname/change', views.ChangeNicknameView.changeNickname ,name='changeNickname'), 
